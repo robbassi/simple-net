@@ -2,7 +2,7 @@ Simple neural net in Haskell, inspired by [joelgrus/joelnet](https://github.com/
 
 ### XOR Example
 ```
-stack ghci
+$ stack ghci
 *Main> :l XOR
 *XOR> import System.Random
 *XOR System.Random> g <- getStdGen
