@@ -22,4 +22,4 @@ executable simple-net
                      , vector
                      , random
                      , normaldistribution
-                     , hmatrix
+                     , MonadRandom

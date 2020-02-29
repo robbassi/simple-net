@@ -1,7 +1,7 @@
 module Layer where
 
 import Tensor
-import System.Random (StdGen)
+import Control.Monad.Random
 
 data Layer = 
     LinearLayer 
@@ -39,13 +39,13 @@ sumRows t = fromLists . take (nrows t) $ repeat sum
         rows = toLists t
         z = rows !! 0
 
-linearLayer :: StdGen -> Int -> Int -> Layer
-linearLayer g rows columns = 
-  LinearLayer (mkTensor g rows columns)
-              (mkTensor g rows columns)
-              (mkTensor g rows columns)
-              (mkBias g rows columns)
-              (mkBias g rows columns)
+linearLayer :: Int -> Int -> Rand StdGen Layer
+linearLayer r c = do
+  weight     <- mkTensor r c
+  weightGrad <- mkTensor r c
+  bias       <- mkBias r c
+  biasGrad   <- mkBias r c
+  return $ LinearLayer (identity 0) weight weightGrad bias biasGrad
 
 tanhLayer :: Layer
 tanhLayer = ActivationLayer (identity 0) f f'

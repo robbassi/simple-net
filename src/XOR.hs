@@ -6,7 +6,7 @@ import Layer
 import Train
 import Text.Printf (printf)
 import Control.Monad
-import System.Random (StdGen) 
+import Control.Monad.Random 
 
 inputs = [[0, 0]
          ,[1, 0]
@@ -18,11 +18,14 @@ targets = [[1, 0]
           ,[0, 1]
           ,[1, 0]]
 
-netXOR :: StdGen -> Net
-netXOR g = mkNet [linearLayer g 2 2, tanhLayer, linearLayer g 2 2]
+netXOR :: Rand StdGen Net
+netXOR = do
+  linearLayer1 <- linearLayer 2 2
+  linearLayer2 <- linearLayer 2 2
+  return $ mkNet [linearLayer1, tanhLayer, linearLayer2]
 
-trainXOR :: StdGen -> Int -> Net -> Net
-trainXOR g epochs net = train g net (zip inputs targets) epochs 0.0
+trainXOR :: Int -> Net -> Rand StdGen Net
+trainXOR epochs net = train net (zip inputs targets) epochs 0.0
 
 testNet :: Net -> IO ()
 testNet net = forM_ (zip inputs targets) check

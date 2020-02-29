@@ -6,21 +6,20 @@ module Tensor (
 ) where
 
 import Data.Matrix
-import qualified Data.Vector as V
 import Data.Random.Normal (mkNormals)
-import System.Random
+import Control.Monad.Random (Rand, StdGen, liftRand, next)
 
 type Tensor = Matrix Double
 -- ^ Tensor will just be an instance of Matrix
 
-mkTensor :: StdGen -> Int -> Int -> Tensor
+mkTensor :: Int -> Int -> Rand StdGen Tensor
 -- ^ Build a tensor, using the standard normal distribution for values
-mkTensor g rs cs = fromList rs cs (mkNormals seed)
-  where (seed, _) = next g
+mkTensor rs cs = liftRand next >>= return . fromList rs cs . mkNormals
 
-mkBias :: StdGen -> Int -> Int -> Tensor
+mkBias :: Int -> Int -> Rand StdGen Tensor
 -- ^ Similar to tensor, but repeats one row (due to limitations in library)
-mkBias g rs cs = fromLists $ take rs (repeat row)
-  where row = take cs $ mkNormals seed
-        (seed, _) = next g
+mkBias rs cs = do
+  seed <- liftRand next
+  let row = take cs (mkNormals seed)
+  return . fromLists $ take rs (repeat row)
 

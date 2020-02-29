@@ -1,10 +1,9 @@
 module Main where
 
 import XOR
-import System.Random (getStdGen)
+import Control.Monad.Random
 
 main :: IO ()
 main = do
-  g <- getStdGen
-  testNet $ trainXOR g 10000 $ netXOR g
-  
+  net <- evalRandIO (netXOR >>= trainXOR 10000)
+  testNet net
