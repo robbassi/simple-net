@@ -31,7 +31,7 @@ backward (LinearLayer inputs w wg b bg) grad =
   where wg' = transpose inputs * grad
         bg' = sumRows grad
 backward (ActivationLayer inputs f f') grad =
-  (ActivationLayer inputs f f', grad * f' inputs)
+  (ActivationLayer inputs f f', elementwise (*) (f' inputs) grad)
 
 sumRows :: Tensor -> Tensor
 sumRows t = fromLists . take (nrows t) $ repeat sum
