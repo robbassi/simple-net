@@ -19,7 +19,7 @@ $ stack ghci
 This one is still a work in progress..
 ```
 $ stack ghci
-*Main> :l FizzBuz
+*Main> :l FizzBuzz
 *FizzBuzz> evalRandIO (netFizzBuzz >>= trainFizzBuzz 5000) >>= testNet 
 in: 0 expected: fizzbuzz predicted: buzz
 in: 1 expected: 1 predicted: buzz
